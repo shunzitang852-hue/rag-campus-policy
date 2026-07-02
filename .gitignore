@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.env
+.venv/
+venv/
+.idea/
+.vscode/
+.ipynb_checkpoints/
+cache/
+logs/
+*.tmp
+*.temp
+
+# External large data/model/output directories under F:\GraduationThesis
+../datasets/
+../models/
+../cache/
+../experiment_outputs/
