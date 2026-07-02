@@ -21,6 +21,15 @@ All formal project files for this stage are stored under the F drive. No formal 
 | Experiment outputs | `F:\GraduationThesis\experiment_outputs` | Retrieval experiment results, evaluation metrics, logs, tables, and charts. |
 | Thesis documents | `F:\GraduationThesis\thesis_documents` | Proposal materials, experiment records, stage reports, thesis drafts, and references. |
 
+## Dataset Structure
+
+| Directory | Fixed Path | Usage |
+| --- | --- | --- |
+| HDU raw policy files | `F:\GraduationThesis\datasets\raw\hdu` | Raw Hangzhou Dianzi University policy files after manual source verification. |
+| HDU metadata | `F:\GraduationThesis\datasets\metadata\hdu` | Metadata templates, candidate lists, and verification records for HDU policy collection. |
+| HDU interim data | `F:\GraduationThesis\datasets\interim\hdu` | Intermediate files generated during later cleaning or parsing stages. |
+| HDU processed data | `F:\GraduationThesis\datasets\processed\hdu` | Cleaned text, normalized data, chunks, and downstream dataset artifacts after verification. |
+
 ## Source Project Structure
 
 | Directory or File | Usage |
