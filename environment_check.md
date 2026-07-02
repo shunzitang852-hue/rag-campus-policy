@@ -90,3 +90,29 @@
 
 - `git log --oneline -5` reports that the current branch has no commits yet. This is expected before the first commit.
 - `pip` is available from `C:\Python314`; this is the system Python tool location, not a formal project storage path.
+
+## Python 3.12 Virtual Environment Check
+
+| Item | Result |
+| --- | --- |
+| Check date and time | 2026-07-02 17:10:41 +08:00 |
+| Python 3.12 installation status | Python 3.12.10 installed and usable. |
+| Base interpreter path | `F:\Development\python312\python.exe` |
+| Project virtual environment path | `F:\GraduationThesis\rag-campus-policy\.venv` |
+| Virtual environment Python version | Python 3.12.10 |
+| Virtual environment executable | `F:\GraduationThesis\rag-campus-policy\.venv\Scripts\python.exe` |
+| Virtual environment prefix | `F:\GraduationThesis\rag-campus-policy\.venv` |
+| Virtual environment base prefix | `F:\Development\python312` |
+| encodings path | `F:\Development\python312\Lib\encodings\__init__.py` |
+| pip version | pip 26.1.2 from `F:\GraduationThesis\rag-campus-policy\.venv\Lib\site-packages\pip` |
+| setuptools version | setuptools 82.0.1 |
+| wheel version | wheel 0.47.0 |
+| `.venv` ignored by Git | Yes, `.venv/` is ignored by `.gitignore`. |
+| Python Launcher status in current Codex session | `py -3.12` is not refreshed in this session and still reports no suitable runtime; the verified full interpreter path was used instead. |
+
+## Virtual Environment Notes
+
+- The virtual environment was created with `F:\Development\python312\python.exe`, not the default `python` command.
+- The default system Python 3.14 installation was not modified.
+- No RAG dependencies, models, datasets, or project runtime packages were installed.
+- Only virtual environment base tools were upgraded: pip, setuptools, and wheel.
