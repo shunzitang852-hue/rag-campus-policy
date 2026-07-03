@@ -2,7 +2,7 @@
 
 This file records the fixed paths used by the undergraduate thesis project:
 
-《基于RAG技术的高校政策知识问答系统构建与检索策略优化研究——以杭州电子科技大学信息工程学院为例》
+《基于RAG技术的高校政策知识问答系统构建与检索策略优化研究》
 
 ## Fixed Root
 
