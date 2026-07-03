@@ -2,7 +2,7 @@
 
 This file records the fixed paths used by the undergraduate thesis project:
 
-《基于RAG技术的高校政策知识问答系统构建与检索策略优化研究》
+《基于RAG技术的高校政策知识问答系统构建与检索策略优化研究——以杭州电子科技大学信息工程学院为例》
 
 ## Fixed Root
 
@@ -25,10 +25,14 @@ All formal project files for this stage are stored under the F drive. No formal 
 
 | Directory | Fixed Path | Usage |
 | --- | --- | --- |
-| HDU raw policy files | `F:\GraduationThesis\datasets\raw\hdu` | Raw Hangzhou Dianzi University policy files after manual source verification. |
-| HDU metadata | `F:\GraduationThesis\datasets\metadata\hdu` | Metadata templates, candidate lists, and verification records for HDU policy collection. |
-| HDU interim data | `F:\GraduationThesis\datasets\interim\hdu` | Intermediate files generated during later cleaning or parsing stages. |
-| HDU processed data | `F:\GraduationThesis\datasets\processed\hdu` | Cleaned text, normalized data, chunks, and downstream dataset artifacts after verification. |
+| HDU IES raw policy files | `F:\GraduationThesis\datasets\raw\hdu_ies` | Raw Hangzhou Dianzi University Information Engineering School policy files after manual source verification. |
+| HDU IES metadata | `F:\GraduationThesis\datasets\metadata\hdu_ies` | Metadata templates, indexes, and verification records for HDU IES policy collection. |
+| HDU IES interim data | `F:\GraduationThesis\datasets\interim\hdu_ies` | Intermediate files generated during later cleaning or parsing stages. |
+| HDU IES processed data | `F:\GraduationThesis\datasets\processed\hdu_ies` | Cleaned text, normalized data, chunks, and downstream dataset artifacts after verification. |
+| HDU IES evaluation data | `F:\GraduationThesis\datasets\evaluation\hdu_ies` | Test questions, annotated references, and retrieval evaluation data for HDU IES. |
+| Pending verification raw files | `F:\GraduationThesis\datasets\raw\pending_verification` | Raw files whose institutional ownership or source authenticity is not yet confirmed. |
+| Historical HDU data | `F:\GraduationThesis\datasets\raw\hdu` | Historical Hangzhou Dianzi University main-campus candidate area retained for traceability; do not mix with `hdu_ies`. |
+| Historical HDU metadata | `F:\GraduationThesis\datasets\metadata\hdu` | Historical candidate and metadata templates from the previous research-object stage; retained for traceability. |
 
 ## Source Project Structure
 

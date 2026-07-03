@@ -1,0 +1,24 @@
+institution:
+  id: hdu_ies
+  name: 杭州电子科技大学信息工程学院
+  short_name: 杭电信工
+  english_name: Hangzhou Dianzi University Information Engineering School
+  institution_type: independent_college
+  is_primary_research_object: true
+
+answer_display:
+  required_fields:
+    - conclusion
+    - policy_file_name
+    - issuer
+    - applicable_scope
+    - cited_clause_or_excerpt
+    - page_or_section
+    - verification_status
+  default_template: "根据杭州电子科技大学信息工程学院发布的《文件名称》第X条，……。该规定适用于……。"
+  ambiguous_hdu_prompt: "请确认您咨询的是杭州电子科技大学本部，还是杭州电子科技大学信息工程学院。"
+
+corpus_policy:
+  primary_institution_id: hdu_ies
+  keep_institutions_separated: true
+  national_and_ministry_documents: supplemental_only
