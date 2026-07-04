@@ -138,6 +138,7 @@ rag-campus-policy\
 * 人工抽样核验材料生成，并由用户确认允许进入 Chunk 设计阶段
 * 三种 Chunk 策略设计与外部 Chunk 数据生成
 * Chunk 覆盖率、长度分布和自动化验收
+* 第一版学生手册问答测试集构建
 
 Chunk 阶段说明：
 
@@ -146,9 +147,16 @@ Chunk 阶段说明：
 * 当前已生成 `fixed_length`、`article_based` 和 `structure_aware` 三种切分策略。
 * 本阶段不包含 Embedding、向量库、BM25、Dense Search、Hybrid Search、Reranker 或 RAG。
 
+问答测试集阶段说明：
+
+* 测试集输出目录：`F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset`
+* 第一版测试集包含 40 条问题，覆盖 32 项制度。
+* 每条问题保留原文证据 `evidence_text`，并关联三种 Chunk 策略下的 chunk_id。
+* 本阶段不包含 Embedding、向量库、BM25、Dense Search、Hybrid Search、Reranker 或 RAG。
+
 当前下一阶段：
 
-* Chunk人工抽样质量复核
+* 问答测试集人工抽样质量复核
 * 为Dense、BM25和Hybrid检索实验准备统一数据
 
 后续按照以下顺序推进：

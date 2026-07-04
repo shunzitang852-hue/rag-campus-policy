@@ -1,0 +1,26 @@
+version: qa-testset-v1
+institution_id: hdu_ies
+document_id: hdu_ies_student_handbook
+target_question_count: 40
+minimum_covered_policy_count: 20
+input_cleaned_path: F:\GraduationThesis\datasets\interim\hdu_ies\student_handbook\cleaned\hdu_ies_student_handbook_cleaned.txt
+input_articles_path: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\hdu_ies_student_handbook_articles_clean.jsonl
+chunk_output_dir: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\chunks
+qa_output_dir: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset
+question_types:
+  - fact_lookup
+  - condition
+  - procedure
+  - responsible_body
+  - time_limit
+  - qualification
+  - comparison
+difficulties:
+  - easy
+  - medium
+  - hard
+answer_granularities:
+  - sentence
+  - paragraph
+  - multi_clause
+  - multi_policy
