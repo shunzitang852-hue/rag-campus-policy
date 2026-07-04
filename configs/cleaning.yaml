@@ -1,0 +1,14 @@
+student_handbook_cleaning:
+  institution_id: hdu_ies
+  document_id: hdu_ies_student_handbook
+  raw_path: F:\GraduationThesis\datasets\raw\hdu_ies\student_handbook\hdu_ies_student_handbook_source.txt
+  catalog_path: F:\GraduationThesis\datasets\metadata\hdu_ies\hdu_ies_student_handbook_document_catalog.csv
+  output_dir: F:\GraduationThesis\datasets\interim\hdu_ies\student_handbook\cleaned
+  cleaned_text_filename: hdu_ies_student_handbook_cleaned.txt
+  report_json_filename: hdu_ies_student_handbook_cleaning_report.json
+  anomalies_csv_filename: hdu_ies_student_handbook_cleaning_anomalies.csv
+  markdown_report_path: docs/data/hdu_ies_student_handbook_cleaning_report.md
+  expected_raw_sha256: 83937E33D6E10780DF6BEDEBFB9FD26A2D5D6DE940CF85E8D3F13E3D32165189
+  include_preface_in_cleaned: false
+  include_catalog_in_cleaned: false
+  max_consecutive_blank_lines: 1
