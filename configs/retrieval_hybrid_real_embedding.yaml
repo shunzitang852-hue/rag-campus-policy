@@ -1,0 +1,31 @@
+version: hybrid-real-embedding-v1
+strategies:
+  - fixed_length
+  - article_based
+  - structure_aware
+fusion_methods:
+  - weighted_score
+  - rrf
+weighted_score:
+  real_dense_weight: 0.5
+  bm25_weight: 0.5
+  normalization: per_query_min_max
+  equal_score_value: 0.0
+optional_weight_sets:
+  - real_dense_weight: 0.6
+    bm25_weight: 0.4
+  - real_dense_weight: 0.7
+    bm25_weight: 0.3
+rrf:
+  k: 60
+top_k: 10
+top_k_values:
+  - 1
+  - 3
+  - 5
+  - 10
+qa_jsonl_path: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl
+real_dense_evaluation_dir: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\dense_retrieval_real_embedding\evaluation
+bm25_evaluation_dir: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\bm25_retrieval\evaluation
+output_root: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\hybrid_retrieval_real_embedding
+notes: Reads existing Real Embedding Dense and BM25 evaluation results. Does not overwrite Dense Hash, BM25, or Hash+BM25 Hybrid outputs.

@@ -238,3 +238,19 @@ Run:
 ```
 
 This stage only performs real embedding Dense Search. It does not run BM25, Hybrid Search, Reranker, or RAG generation.
+
+## Real Embedding Hybrid Search
+
+Real Embedding + BM25 Hybrid Search is available through `scripts/evaluate_real_embedding_hybrid_retrieval.py`.
+
+- Weighted fusion: real dense `0.5`, BM25 `0.5`
+- RRF parameter: `k = 60`
+- Output root: `F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\hybrid_retrieval_real_embedding`
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\evaluate_real_embedding_hybrid_retrieval.py
+```
+
+This stage only fuses existing Real Embedding Dense and BM25 results. It does not rebuild BM25, overwrite old Hash Hybrid results, run Reranker, or generate RAG answers.
