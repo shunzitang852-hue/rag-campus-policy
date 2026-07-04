@@ -21,6 +21,7 @@ CONFIG_PATH = REPO_ROOT / "configs" / "retrieval_dense_real_embedding.yaml"
 CHUNK_ROOT = Path(r"F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\chunks")
 QA_JSONL = Path(r"F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl")
 OUTPUT_ROOT = Path(r"F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\dense_retrieval_real_embedding")
+REPORT_PATH = OUTPUT_ROOT / "evaluation" / "real_embedding_dense_evaluation_report.json"
 
 
 def test_real_embedding_config_loadable():
@@ -28,6 +29,8 @@ def test_real_embedding_config_loadable():
 
     assert config["embedding_provider"] == "sentence_transformers"
     assert config["model_name"] == "BAAI/bge-small-zh-v1.5"
+    assert config["model_cache_dir"] == r"F:\GraduationThesis\models"
+    assert config["hf_home"] == r"F:\GraduationThesis\cache\huggingface"
     assert set(config["strategies"]) == {"fixed_length", "article_based", "structure_aware"}
     assert {"deterministic_hash", "sentence_transformers", "local_model_placeholder"} <= set(config["supported_providers"])
 
@@ -142,3 +145,17 @@ def test_local_model_placeholder_is_explicitly_unavailable():
         assert "local_model_placeholder" in str(exc)
     else:
         raise AssertionError("placeholder provider should not silently generate vectors")
+
+
+def test_real_embedding_report_contains_required_acceptance_fields():
+    report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+
+    assert "model_ran" in report
+    assert report["provider"] in {"sentence_transformers", "deterministic_hash"}
+    assert report["model_name"] == "BAAI/bge-small-zh-v1.5"
+    assert "embedding_dimension" in report
+    assert report["model_cache_path"] == r"F:\GraduationThesis\models"
+    assert set(report["chunk_count_by_strategy"]) == {"fixed_length", "article_based", "structure_aware"}
+    assert set(report["baseline_recall_at_5_comparison"]) == {"fixed_length", "article_based", "structure_aware"}
+    assert report["modified_inputs"] == {"raw": False, "cleaned": False, "chunks": False, "qa": False}
+    assert report["overwrote_historical_outputs"] == {"dense_hash": False, "bm25": False, "hybrid": False}

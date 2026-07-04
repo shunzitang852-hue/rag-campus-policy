@@ -11,7 +11,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.build_real_embedding_dense_retrieval import CONFIG_PATH, OUTPUT_ROOT, STRATEGIES, build_all
+from scripts.build_real_embedding_dense_retrieval import CONFIG_PATH, OUTPUT_ROOT, STRATEGIES, build_all, configure_model_cache_environment
 from src.preprocessing.policy_splitter import DEFAULT_RAW_PATH, EXPECTED_RAW_SHA256, sha256_file
 from src.retrieval.dense_index import load_jsonl, write_jsonl
 from src.retrieval.embedding import cosine_similarity
@@ -25,6 +25,9 @@ QA_JSONL = DATASETS_ROOT / "processed" / "hdu_ies" / "student_handbook" / "qa_te
 CLEANED_PATH = DATASETS_ROOT / "interim" / "hdu_ies" / "student_handbook" / "cleaned" / "hdu_ies_student_handbook_cleaned.txt"
 CHUNK_ROOT = DATASETS_ROOT / "processed" / "hdu_ies" / "student_handbook" / "chunks"
 TOP_K_VALUES = [1, 3, 5, 10]
+DENSE_HASH_REPORT = PROJECT_ROOT.parent / "experiment_outputs" / "hdu_ies" / "student_handbook" / "dense_retrieval" / "evaluation" / "dense_search_evaluation_report.json"
+BM25_REPORT = PROJECT_ROOT.parent / "experiment_outputs" / "hdu_ies" / "student_handbook" / "bm25_retrieval" / "evaluation" / "bm25_evaluation_report.json"
+HYBRID_REPORT = PROJECT_ROOT.parent / "experiment_outputs" / "hdu_ies" / "student_handbook" / "hybrid_retrieval" / "evaluation" / "hybrid_evaluation_report.json"
 
 
 def write_summary_csv(path: Path, metrics_by_strategy: dict[str, dict]) -> None:
@@ -69,19 +72,67 @@ def search_with_provider(query: str, embedding_rows: list[dict[str, Any]], provi
     return results
 
 
+def _load_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_baseline_recall_at_5_comparison() -> dict[str, dict[str, float]]:
+    dense = _load_json(DENSE_HASH_REPORT).get("metrics_by_strategy", {})
+    bm25 = _load_json(BM25_REPORT).get("metrics_by_strategy", {})
+    hybrid = _load_json(HYBRID_REPORT).get("metrics_by_strategy", {})
+    comparison: dict[str, dict[str, float]] = {}
+    for strategy in STRATEGIES:
+        comparison[strategy] = {}
+        if strategy in dense:
+            comparison[strategy]["dense_hash"] = dense[strategy]["Recall@5"]
+        if strategy in bm25:
+            comparison[strategy]["bm25"] = bm25[strategy]["Recall@5"]
+        if strategy in hybrid and "weighted_score" in hybrid[strategy]:
+            comparison[strategy]["hybrid_weighted"] = hybrid[strategy]["weighted_score"]["Recall@5"]
+    return comparison
+
+
+def chunk_count_by_strategy() -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for strategy in STRATEGIES:
+        counts[strategy] = len(load_jsonl(CHUNK_ROOT / f"hdu_ies_student_handbook_chunks_{strategy}.jsonl"))
+    return counts
+
+
 def write_report_only(output_root: Path, reason: str, config: dict[str, Any] | None = None) -> dict[str, Any]:
     evaluation_dir = output_root / "evaluation"
     evaluation_dir.mkdir(parents=True, exist_ok=True)
+    config = config or {}
     report = {
         "stage": "dense_real_embedding_retrieval",
         "model_ran": False,
         "is_real_semantic_embedding": False,
         "official_experiment_ready": False,
-        "embedding_provider": (config or {}).get("embedding_provider", "sentence_transformers"),
-        "model_name": (config or {}).get("model_name", "BAAI/bge-small-zh-v1.5"),
-        "model_cache_dir": (config or {}).get("model_cache_dir", str(PROJECT_ROOT.parent / "models")),
+        "provider": config.get("embedding_provider", "sentence_transformers"),
+        "embedding_provider": config.get("embedding_provider", "sentence_transformers"),
+        "model_name": config.get("model_name", "BAAI/bge-small-zh-v1.5"),
+        "embedding_dimension": None,
+        "model_cache_path": config.get("model_cache_dir", str(PROJECT_ROOT.parent / "models")),
+        "model_cache_dir": config.get("model_cache_dir", str(PROJECT_ROOT.parent / "models")),
+        "cache_environment": configure_model_cache_environment(config),
+        "chunk_count_by_strategy": chunk_count_by_strategy(),
+        "question_count": len(load_jsonl(QA_JSONL)),
         "failure_reason": reason,
         "metrics_by_strategy": {},
+        "baseline_recall_at_5_comparison": load_baseline_recall_at_5_comparison(),
+        "modified_inputs": {
+            "raw": False,
+            "cleaned": False,
+            "chunks": False,
+            "qa": False,
+        },
+        "overwrote_historical_outputs": {
+            "dense_hash": False,
+            "bm25": False,
+            "hybrid": False,
+        },
         "raw_sha256": sha256_file(DEFAULT_RAW_PATH),
         "cleaned_sha256": sha256_file(CLEANED_PATH),
         "chunk_file_sha256": {
@@ -106,6 +157,7 @@ def evaluate_all(output_root: Path = OUTPUT_ROOT, config_path: Path = CONFIG_PAT
     from scripts.build_real_embedding_dense_retrieval import load_simple_yaml
 
     config = load_simple_yaml(config_path)
+    cache_environment = configure_model_cache_environment(config)
     build_summary = build_all(output_root, config_path)
     if not build_summary.get("model_ran"):
         return write_report_only(output_root, str(build_summary.get("reason", "provider unavailable")), config)
@@ -136,10 +188,32 @@ def evaluate_all(output_root: Path = OUTPUT_ROOT, config_path: Path = CONFIG_PAT
         "model_ran": True,
         "is_real_semantic_embedding": True,
         "official_experiment_ready": True,
+        "provider": build_summary["provider"]["provider"],
         "embedding_provider": build_summary["provider"],
+        "model_name": build_summary["provider"].get("model_name"),
+        "embedding_dimension": build_summary["provider"].get("embedding_dimension"),
+        "model_cache_path": build_summary["provider"].get("cache_dir"),
+        "model_cache_dir": build_summary["provider"].get("cache_dir"),
+        "cache_environment": cache_environment,
+        "chunk_count_by_strategy": {
+            strategy: build_summary["strategies"][strategy]["chunk_count"]
+            for strategy in STRATEGIES
+        },
         "question_count": len(questions),
         "top_k_values": TOP_K_VALUES,
         "metrics_by_strategy": all_metrics,
+        "baseline_recall_at_5_comparison": load_baseline_recall_at_5_comparison(),
+        "modified_inputs": {
+            "raw": False,
+            "cleaned": False,
+            "chunks": False,
+            "qa": False,
+        },
+        "overwrote_historical_outputs": {
+            "dense_hash": False,
+            "bm25": False,
+            "hybrid": False,
+        },
         "raw_sha256": sha256_file(DEFAULT_RAW_PATH),
         "cleaned_sha256": sha256_file(CLEANED_PATH),
         "chunk_file_sha256": {

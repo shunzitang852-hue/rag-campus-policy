@@ -89,7 +89,12 @@ class SentenceTransformersProvider:
         self.cache_dir = cache_dir
         self.device = device
         self.model = SentenceTransformer(model_name, **kwargs)
-        dimension = getattr(self.model, "get_sentence_embedding_dimension", lambda: None)()
+        dimension_method = getattr(
+            self.model,
+            "get_embedding_dimension",
+            getattr(self.model, "get_sentence_embedding_dimension", lambda: None),
+        )
+        dimension = dimension_method()
         self.dimension = int(dimension) if dimension else None
 
     def encode(self, texts: list[str]) -> list[list[float]]:

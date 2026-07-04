@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,9 @@ OUTPUT_ROOT = PROJECT_ROOT.parent / "experiment_outputs" / "hdu_ies" / "student_
 CHUNK_ROOT = DATASETS_ROOT / "processed" / "hdu_ies" / "student_handbook" / "chunks"
 CONFIG_PATH = PROJECT_ROOT / "configs" / "retrieval_dense_real_embedding.yaml"
 STRATEGIES = ["fixed_length", "article_based", "structure_aware"]
+DEFAULT_HF_HOME = PROJECT_ROOT.parent / "cache" / "huggingface"
+DEFAULT_TRANSFORMERS_CACHE = DEFAULT_HF_HOME / "transformers"
+DEFAULT_SENTENCE_TRANSFORMERS_HOME = PROJECT_ROOT.parent / "models" / "sentence_transformers"
 
 
 def load_simple_yaml(path: Path) -> dict[str, Any]:
@@ -43,6 +47,19 @@ def load_simple_yaml(path: Path) -> dict[str, Any]:
             else:
                 config[key] = value
     return config
+
+
+def configure_model_cache_environment(config: dict[str, Any]) -> dict[str, str]:
+    paths = {
+        "HF_HOME": str(config.get("hf_home") or DEFAULT_HF_HOME),
+        "TRANSFORMERS_CACHE": str(config.get("transformers_cache") or DEFAULT_TRANSFORMERS_CACHE),
+        "SENTENCE_TRANSFORMERS_HOME": str(config.get("sentence_transformers_home") or DEFAULT_SENTENCE_TRANSFORMERS_HOME),
+    }
+    for value in paths.values():
+        Path(value).mkdir(parents=True, exist_ok=True)
+    for key, value in paths.items():
+        os.environ[key] = value
+    return paths
 
 
 def _chunk_to_embedding_row(chunk: dict[str, Any], embedding: list[float]) -> dict[str, Any]:
@@ -89,6 +106,7 @@ def write_unavailable_manifest(output_root: Path, config: dict[str, Any], reason
 
 def build_all(output_root: Path = OUTPUT_ROOT, config_path: Path = CONFIG_PATH) -> dict[str, Any]:
     config = load_simple_yaml(config_path)
+    cache_environment = configure_model_cache_environment(config)
     batch_size = int(config.get("batch_size", 32))
     try:
         provider = create_provider(config)
@@ -100,11 +118,13 @@ def build_all(output_root: Path = OUTPUT_ROOT, config_path: Path = CONFIG_PATH) 
             "manifest_path": str(manifest_path),
             "provider": config.get("embedding_provider"),
             "model_name": config.get("model_name"),
+            "cache_environment": cache_environment,
         }
 
     summary: dict[str, Any] = {
         "model_ran": True,
         "provider": provider.metadata(),
+        "cache_environment": cache_environment,
         "strategies": {},
     }
     embeddings_dir = output_root / "embeddings"

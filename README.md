@@ -221,3 +221,20 @@ Codex 可以辅助完成代码编写、环境执行、测试、统计和图表�
 * 相关政策文档和页码标注是否准确；
 * 实验变量和控制变量是否明确；
 * 最终结果是否来自真实运行。
+## Real Embedding Dense Search
+
+Real Chinese embedding Dense Search is available through `scripts/evaluate_real_embedding_dense_retrieval.py`.
+
+- Provider: `sentence_transformers`
+- Model: `BAAI/bge-small-zh-v1.5`
+- Model cache: `F:\GraduationThesis\models`
+- HF cache: `F:\GraduationThesis\cache\huggingface`
+- Output root: `F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\dense_retrieval_real_embedding`
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\evaluate_real_embedding_dense_retrieval.py
+```
+
+This stage only performs real embedding Dense Search. It does not run BM25, Hybrid Search, Reranker, or RAG generation.

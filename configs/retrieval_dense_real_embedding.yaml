@@ -1,7 +1,12 @@
 version: dense-real-embedding-v1
 embedding_provider: sentence_transformers
+provider: sentence_transformers
 model_name: BAAI/bge-small-zh-v1.5
+cache_dir: F:\GraduationThesis\models
 model_cache_dir: F:\GraduationThesis\models
+hf_home: F:\GraduationThesis\cache\huggingface
+transformers_cache: F:\GraduationThesis\cache\huggingface\transformers
+sentence_transformers_home: F:\GraduationThesis\models\sentence_transformers
 local_model_path: F:\GraduationThesis\models\BAAI\bge-small-zh-v1.5
 embedding_dimension: auto
 batch_size: 32

@@ -16,7 +16,7 @@ Supported provider names:
 - `sentence_transformers`: real embedding provider for local or downloadable sentence-transformers models.
 - `local_model_placeholder`: explicit placeholder for future local-model integration; it fails with a controlled `ProviderUnavailable` error instead of silently producing fake vectors.
 
-The preferred real model is `BAAI/bge-small-zh-v1.5`, cached under `F:\GraduationThesis\models` when available. The current project does not add `sentence-transformers` to requirements because the active environment does not contain the library or a local model cache, and this stage should not force a large model download into Git-controlled work.
+The preferred real model is `BAAI/bge-small-zh-v1.5`, cached under `F:\GraduationThesis\models`. The active run uses `sentence-transformers==5.6.0` with CPU `torch` and keeps HuggingFace cache files outside the Git repository.
 
 ## Data Flow
 
@@ -26,6 +26,12 @@ The preferred real model is `BAAI/bge-small-zh-v1.5`, cached under `F:\Graduatio
 2. Creates the configured provider.
 3. Encodes each chunk strategy in batches.
 4. Writes embeddings and lightweight index metadata to `F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\dense_retrieval_real_embedding`.
+
+Before loading any model, the build script sets:
+
+- `HF_HOME=F:\GraduationThesis\cache\huggingface`
+- `TRANSFORMERS_CACHE=F:\GraduationThesis\cache\huggingface\transformers`
+- `SENTENCE_TRANSFORMERS_HOME=F:\GraduationThesis\models\sentence_transformers`
 
 `scripts/evaluate_real_embedding_dense_retrieval.py`:
 

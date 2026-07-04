@@ -1,1 +1,1 @@
-# Dependencies will be added in later stages.
+sentence-transformers==5.6.0
