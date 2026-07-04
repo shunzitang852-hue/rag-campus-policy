@@ -140,6 +140,7 @@ rag-campus-policy\
 * Chunk 覆盖率、长度分布和自动化验收
 * 第一版学生手册问答测试集构建
 * deterministic hash embedding 与 Dense Search 检索基线流程验证
+* 标准库 BM25 关键词检索基线流程验证
 
 Chunk 阶段说明：
 
@@ -162,10 +163,17 @@ Dense Search 基线说明：
 * 当前结果只用于验证 Dense Search 检索、Recall@K 和 MRR@10 评估流程。
 * 本阶段不包含 BM25、Hybrid Search、Reranker 或 RAG。
 
+BM25 基线说明：
+
+* 外部输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\bm25_retrieval`
+* 当前使用 Python 标准库 BM25，分词方法为中文单字和相邻二元片段。
+* 当前结果用于验证关键词检索、Recall@K 和 MRR@10 评估流程。
+* 本阶段不包含 Hybrid Search、Reranker 或 RAG。
+
 当前下一阶段：
 
-* 替换真实中文 Embedding 模型并重新计算 Dense Search 指标
-* 在 Dense 基线稳定后再进入 BM25 和 Hybrid 检索实验
+* 对 Dense Hash 与 BM25 基线结果进行论文实验口径整理
+* 在单路检索基线稳定后再进入 Hybrid 检索实验
 
 后续按照以下顺序推进：
 
