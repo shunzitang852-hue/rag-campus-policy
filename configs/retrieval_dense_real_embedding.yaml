@@ -1,0 +1,26 @@
+version: dense-real-embedding-v1
+embedding_provider: sentence_transformers
+model_name: BAAI/bge-small-zh-v1.5
+model_cache_dir: F:\GraduationThesis\models
+local_model_path: F:\GraduationThesis\models\BAAI\bge-small-zh-v1.5
+embedding_dimension: auto
+batch_size: 32
+top_k: 10
+top_k_values:
+  - 1
+  - 3
+  - 5
+  - 10
+strategies:
+  - fixed_length
+  - article_based
+  - structure_aware
+supported_providers:
+  - deterministic_hash
+  - sentence_transformers
+  - local_model_placeholder
+qa_jsonl_path: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl
+chunk_dir: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\chunks
+output_root: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\dense_retrieval_real_embedding
+fallback_behavior: If sentence-transformers or a local model is unavailable, write a report-only artifact and do not claim real semantic retrieval metrics.
+notes: This config adds a real Chinese embedding provider interface without replacing the deterministic hash baseline.
