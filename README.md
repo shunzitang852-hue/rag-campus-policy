@@ -139,6 +139,7 @@ rag-campus-policy\
 * 三种 Chunk 策略设计与外部 Chunk 数据生成
 * Chunk 覆盖率、长度分布和自动化验收
 * 第一版学生手册问答测试集构建
+* deterministic hash embedding 与 Dense Search 检索基线流程验证
 
 Chunk 阶段说明：
 
@@ -154,10 +155,17 @@ Chunk 阶段说明：
 * 每条问题保留原文证据 `evidence_text`，并关联三种 Chunk 策略下的 chunk_id。
 * 本阶段不包含 Embedding、向量库、BM25、Dense Search、Hybrid Search、Reranker 或 RAG。
 
+Dense Search 基线说明：
+
+* 外部输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\dense_retrieval`
+* 当前使用 `deterministic_hash_embedding`，不是正式语义 Embedding 模型。
+* 当前结果只用于验证 Dense Search 检索、Recall@K 和 MRR@10 评估流程。
+* 本阶段不包含 BM25、Hybrid Search、Reranker 或 RAG。
+
 当前下一阶段：
 
-* 问答测试集人工抽样质量复核
-* 为Dense、BM25和Hybrid检索实验准备统一数据
+* 替换真实中文 Embedding 模型并重新计算 Dense Search 指标
+* 在 Dense 基线稳定后再进入 BM25 和 Hybrid 检索实验
 
 后续按照以下顺序推进：
 
