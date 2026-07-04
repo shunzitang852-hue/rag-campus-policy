@@ -1,0 +1,26 @@
+version: chunking-v1
+default_strategy: structure_aware
+output_format: jsonl
+sentence_boundary_chars: "。；;！？!?\\n"
+strategies:
+  fixed_length:
+    chunk_size: 500
+    chunk_overlap: 100
+    min_chunk_size: 80
+    max_chunk_size: 500
+    merge_short_chunks: false
+    preserve_article_boundary: false
+  article_based:
+    chunk_size: 700
+    chunk_overlap: 80
+    min_chunk_size: 120
+    max_chunk_size: 900
+    merge_short_chunks: true
+    preserve_article_boundary: true
+  structure_aware:
+    chunk_size: 700
+    chunk_overlap: 80
+    min_chunk_size: 120
+    max_chunk_size: 900
+    merge_short_chunks: true
+    preserve_article_boundary: true

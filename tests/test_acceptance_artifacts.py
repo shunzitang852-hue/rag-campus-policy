@@ -57,7 +57,7 @@ def test_official_title_is_preserved_and_wrong_title_absent():
 
 def test_no_chunk_embedding_or_vector_artifacts_exist():
     forbidden = []
-    for pattern in ["*chunk*", "*embedding*", "*.sqlite3", "*.faiss", "*.index", "*.parquet"]:
+    for pattern in ["*embedding*", "*.sqlite3", "*.faiss", "*.index", "*.parquet"]:
         forbidden.extend(Path(r"F:\GraduationThesis\datasets").rglob(pattern))
 
     assert not forbidden
