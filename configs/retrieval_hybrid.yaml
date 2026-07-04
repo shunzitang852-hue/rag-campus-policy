@@ -1,0 +1,27 @@
+version: hybrid-retrieval-v1
+strategies:
+  - fixed_length
+  - article_based
+  - structure_aware
+fusion_methods:
+  - weighted_score
+  - rrf
+weighted_score:
+  dense_weight: 0.4
+  bm25_weight: 0.6
+  normalization: per_query_min_max
+  equal_score_value: 0.0
+rrf:
+  k: 60
+top_k: 10
+top_k_values:
+  - 1
+  - 3
+  - 5
+  - 10
+qa_jsonl_path: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl
+chunk_dir: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\chunks
+dense_evaluation_dir: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\dense_retrieval\evaluation
+bm25_evaluation_dir: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\bm25_retrieval\evaluation
+output_root: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\hybrid_retrieval
+notes: Reads existing Dense Hash and BM25 evaluation results, then validates Hybrid Search fusion only. No Reranker or RAG generation is performed.

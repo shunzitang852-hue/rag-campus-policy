@@ -61,3 +61,14 @@ def test_no_chunk_embedding_or_vector_artifacts_exist():
         forbidden.extend(Path(r"F:\GraduationThesis\datasets").rglob(pattern))
 
     assert not forbidden
+
+
+def test_hybrid_evaluation_artifacts_cover_all_strategies_and_methods():
+    report_path = Path(r"F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\hybrid_retrieval\evaluation\hybrid_evaluation_report.json")
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+
+    assert set(report["metrics_by_strategy"]) == {"fixed_length", "article_based", "structure_aware"}
+    for metrics_by_method in report["metrics_by_strategy"].values():
+        assert set(metrics_by_method) == {"weighted_score", "rrf"}
+        for metrics in metrics_by_method.values():
+            assert metrics["question_count"] == 40
