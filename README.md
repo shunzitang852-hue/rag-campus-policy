@@ -254,3 +254,21 @@ Run:
 ```
 
 This stage only fuses existing Real Embedding Dense and BM25 results. It does not rebuild BM25, overwrite old Hash Hybrid results, run Reranker, or generate RAG answers.
+
+## 检索问答 Demo
+
+Retrieval-only QA Demo is available through `scripts/demo_retrieval_qa.py`.
+
+- Default method: `real_dense`
+- Default chunk strategy: `fixed_length`
+- Default top_k: `5`
+- Supported methods: `bm25`, `real_dense`, `real_hybrid_weighted`
+- Supported strategies: `fixed_length`, `article_based`, `structure_aware`
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\demo_retrieval_qa.py --query "学生申请解除处分需要满足什么条件？" --method real_dense --strategy fixed_length --top-k 5
+```
+
+The demo only displays retrieval results from the student handbook chunks. It does not call an LLM, run a Reranker, generate final RAG answers, or overwrite historical experiment outputs.
