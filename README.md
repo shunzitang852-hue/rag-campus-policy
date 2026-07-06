@@ -346,3 +346,20 @@ Run:
 ```
 
 v2 仍使用 `real_hybrid_weighted + fixed_length + top_k=5`。生成阶段只接收问题文本和检索返回的 Chunk 内容，`expected_answer` 与 `evidence_text` 只用于后续质量评估。
+
+## RAG v2 误差分析与人工复核辅助
+
+当前已完成 RAG v2 回答质量优化，并新增 v2 误差分析与人工复核辅助表。本阶段重点不是继续改动历史实验结果，而是围绕 v2 中的 `needs_review`、v1 到 v2 变差样例、`condition` 类型问题和 `medium` 难度问题建立可复核的误差分析材料。
+
+- 误差分析脚本：`scripts/analyze_rag_answer_errors_v2.py`
+- 误差分析逻辑：`src/rag/answer_error_analysis.py`
+- 误差分析文档：`docs/rag/rag_answer_error_analysis_v2.md`
+- 外部输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_answer_quality_error_analysis`
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\analyze_rag_answer_errors_v2.py
+```
+
+该脚本输出 needs_review 人工复核表、v1 到 v2 变差样例复核表、condition/medium 重点问题表和 JSON 汇总报告。下一步将基于这些误差分析结果推进 v3 定向优化。当前仍未调用大模型 API，未做 Reranker，未做 Web 前端。
