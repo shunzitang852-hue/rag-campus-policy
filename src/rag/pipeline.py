@@ -131,6 +131,8 @@ def answer_query(
         "top_k": selected_top_k,
         "result_count": len(raw_results),
         "context_count": len(context),
+        "retrieved_chunk_ids": [item.chunk_id for item in context],
+        "source_policy_titles": sorted({item.document_title for item in context if item.document_title}),
         "fallback_used": actual_method != selected_method,
         "fallback_errors": retrieval_errors,
     }

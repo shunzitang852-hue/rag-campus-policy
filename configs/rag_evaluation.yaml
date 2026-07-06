@@ -1,0 +1,15 @@
+version: rag-evaluation-v1
+qa_jsonl_path: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl
+output_root: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_evaluation
+default_method: real_hybrid_weighted
+default_strategy: fixed_length
+default_top_k: 5
+answer_mode: extractive
+combinations:
+  - real_hybrid_weighted|fixed_length|5
+optional_combinations:
+  - real_dense|fixed_length|5
+  - bm25|fixed_length|5
+  - real_hybrid_weighted|article_based|5
+  - real_hybrid_weighted|structure_aware|5
+notes: Batch evaluation reads QA labels only for scoring. Answer generation receives question text only.

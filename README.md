@@ -292,3 +292,20 @@ Run:
 ```
 
 The RAG demo generates a short template-based answer from retrieved Chunk text and prints citations with source document titles, `chunk_id`, scores, strategy, and retrieval method. It does not call a paid API, run a Reranker, build a Web frontend, or overwrite historical experiment outputs.
+
+## RAG Batch Evaluation
+
+RAG batch evaluation is available through `scripts/evaluate_rag_qa.py`.
+
+- Default method/strategy/top_k: `real_hybrid_weighted` + `fixed_length` + `5`
+- QA input: `F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl`
+- Output root: `F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_evaluation`
+- Metrics include answer non-empty rate, citation coverage, source policy hit rate, related chunk hit rate, fallback count, and grouped summaries by question type and difficulty.
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\evaluate_rag_qa.py
+```
+
+The evaluator sends only question text to the RAG pipeline. QA labels and evidence fields are used only for automatic scoring. Generated external evaluation files are not committed to Git.
