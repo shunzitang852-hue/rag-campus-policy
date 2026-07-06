@@ -363,3 +363,24 @@ Run:
 ```
 
 该脚本输出 needs_review 人工复核表、v1 到 v2 变差样例复核表、condition/medium 重点问题表和 JSON 汇总报告。下一步将基于这些误差分析结果推进 v3 定向优化。当前仍未调用大模型 API，未做 Reranker，未做 Web 前端。
+
+## RAG v3 定向答案优化实验
+
+当前已完成 v2 误差分析，并新增 v3 定向优化实验。v3 重点处理 `condition` 条件覆盖不足和 `medium` 难度回答过泛的问题，同时为 `procedure`、`responsible_body`、`qualification` 等类型增加结构化回答模板。
+
+- v3 生成脚本：`scripts/generate_rag_answers_v3.py`
+- v3 质量评估脚本：`scripts/review_rag_answer_quality_v3.py`
+- v2/v3 对比脚本：`scripts/compare_rag_answer_quality_v2_v3.py`
+- v3 优化逻辑：`src/rag/answer_v3_optimization.py`
+- v3 实验文档：`docs/rag/rag_answer_quality_v3_optimization.md`
+- 外部输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_answer_quality_v3_optimization`
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\generate_rag_answers_v3.py
+.\.venv\Scripts\python.exe scripts\review_rag_answer_quality_v3.py
+.\.venv\Scripts\python.exe scripts\compare_rag_answer_quality_v2_v3.py
+```
+
+v3 自动评估显示，condition 和 medium 目标分组有改善，但整体 `average_keyword_overlap_ratio` 和 `needs_review_count` 不如 v2。因此 v3 当前应视为定向优化实验版本，而不是默认替代 v2 的稳定版本。当前仍未调用大模型 API，未做 Reranker，未做 Web 前端。下一步建议进行人工复核，或设计 Reranker / LLM Judge 对比实验。
