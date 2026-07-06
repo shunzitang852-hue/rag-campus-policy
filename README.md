@@ -396,3 +396,17 @@ v3 自动评估显示，condition 和 medium 目标分组有改善，但整体 `
 当前默认 RAG 回答策略建议继续使用 `v2`，检索输入建议为 `real_hybrid_weighted + fixed_length + top_k=5`。v3 作为针对 `condition` 类型和 `medium` 难度问题的定向优化实验记录，不替代 v2 默认方案。
 
 本阶段仍未调用大模型 API，仍未做 Reranker，仍未做 Web 前端，也未覆盖 Dense、BM25、Hybrid、Real Dense、Real Hybrid、RAG v1、RAG v2 或 RAG v3 的历史输出。下一步建议进入人工复核和论文实验章节撰写；如继续扩展实验，可在独立输出目录中设计 Reranker、LLM Judge 或真实大模型生成对照实验。
+
+## 论文实验结果索引与表格
+
+当前已完成论文实验汇总沉淀，并新增 `docs/results` 实验结果索引与结果表：
+
+- 结果索引：`docs/results/experiment_results_index.md`
+- 结果表格：`docs/results/experiment_results_tables.md`
+- 结果摘要：`docs/results/experiment_results_summary.md`
+- 结构化导出脚本：`scripts/export_experiment_results_tables.py`
+- 外部结构化输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\experiment_results_tables`
+
+当前默认实验方案为 `real_hybrid_weighted + fixed_length + top_k=5 + RAG v2`。v3 继续作为 `condition` 与 `medium` 目标分组的定向优化实验记录，不替代 v2 默认方案。
+
+下一步建议由人工基于这些结果表撰写论文正文，或继续进行人工复核、Reranker、LLM Judge 等扩展实验。本轮仍未调用大模型 API，未做 Reranker，未做 Web 前端，也未覆盖历史实验结果。
