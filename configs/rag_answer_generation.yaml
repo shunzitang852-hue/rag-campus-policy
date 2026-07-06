@@ -1,0 +1,11 @@
+version: rag-answer-generation-v2
+max_answer_chars: 500
+max_sentences: 4
+max_sentence_chars: 180
+min_sentence_score: 1
+same_document_bonus: 2
+article_anchor_bonus: 6
+type_keyword_bonus: 2
+question_term_bonus: 1
+fallback_excerpt_chars: 260
+notes: Rule-based extractive answer generation uses only retrieved chunks and citations.

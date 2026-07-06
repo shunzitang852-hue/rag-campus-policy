@@ -326,3 +326,23 @@ Run:
 ```
 
 The evaluator uses rule-based keyword and evidence overlap signals plus citation/chunk checks. These automatic metrics are only review aids and are not equivalent to final answer correctness.
+
+## RAG 答案质量优化
+
+本轮 RAG 答案质量优化只调整 extractive/template-based answer generator 的规则，不调用大模型 API，不使用 Reranker，不构建 Web 前端，也不覆盖历史实验结果。
+
+- 规则配置：`configs/rag_answer_generation.yaml`
+- needs_review 分析脚本：`scripts/analyze_rag_answer_quality.py`
+- v2 评估脚本：`scripts/evaluate_rag_answer_quality_improvement.py`
+- 设计文档：`docs/rag/rag_answer_quality_improvement_design.md`
+- 结果报告：`docs/rag/rag_answer_quality_improvement_report.md`
+- 外部输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_answer_quality_improvement`
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\analyze_rag_answer_quality.py
+.\.venv\Scripts\python.exe scripts\evaluate_rag_answer_quality_improvement.py
+```
+
+v2 仍使用 `real_hybrid_weighted + fixed_length + top_k=5`。生成阶段只接收问题文本和检索返回的 Chunk 内容，`expected_answer` 与 `evidence_text` 只用于后续质量评估。
