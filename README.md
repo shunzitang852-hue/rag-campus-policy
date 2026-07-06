@@ -309,3 +309,20 @@ Run:
 ```
 
 The evaluator sends only question text to the RAG pipeline. QA labels and evidence fields are used only for automatic scoring. Generated external evaluation files are not committed to Git.
+
+## RAG Answer Quality Evaluation
+
+RAG answer quality evaluation is available through `scripts/evaluate_rag_answer_quality.py`.
+
+- QA input: `F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl`
+- RAG answer input: `F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_evaluation\rag_answers_real_hybrid_weighted_fixed_length.jsonl`
+- Output root: `F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_answer_quality`
+- Outputs include a JSONL review file, a CSV review sheet with manual scoring columns, and a JSON summary report.
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\evaluate_rag_answer_quality.py
+```
+
+The evaluator uses rule-based keyword and evidence overlap signals plus citation/chunk checks. These automatic metrics are only review aids and are not equivalent to final answer correctness.

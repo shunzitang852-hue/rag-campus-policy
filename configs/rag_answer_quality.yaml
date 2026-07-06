@@ -1,0 +1,14 @@
+version: rag-answer-quality-v1
+qa_jsonl_path: F:\GraduationThesis\datasets\processed\hdu_ies\student_handbook\qa_testset\hdu_ies_student_handbook_qa_testset_v1.jsonl
+rag_answers_path: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_evaluation\rag_answers_real_hybrid_weighted_fixed_length.jsonl
+rag_evaluation_report_path: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_evaluation\rag_evaluation_report.json
+output_root: F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_answer_quality
+review_csv_name: rag_answer_quality_review_v1.csv
+review_jsonl_name: rag_answer_quality_review_v1.jsonl
+report_json_name: rag_answer_quality_report.json
+strategy: fixed_length
+keyword_min_length: 2
+keyword_max_length: 4
+max_keywords: 30
+good_keyword_overlap_threshold: 0.5
+notes: Rule-based answer quality assistance only. QA labels are used for evaluation, not answer generation.
