@@ -410,3 +410,15 @@ v3 自动评估显示，condition 和 medium 目标分组有改善，但整体 `
 当前默认实验方案为 `real_hybrid_weighted + fixed_length + top_k=5 + RAG v2`。v3 继续作为 `condition` 与 `medium` 目标分组的定向优化实验记录，不替代 v2 默认方案。
 
 下一步建议由人工基于这些结果表撰写论文正文，或继续进行人工复核、Reranker、LLM Judge 等扩展实验。本轮仍未调用大模型 API，未做 Reranker，未做 Web 前端，也未覆盖历史实验结果。
+
+## RAG 人工复核辅助包
+
+当前已新增 RAG 人工复核辅助包，用于把已有 RAG v1/v2/v3、v2 误差分析和实验结果汇总中的样本整理为可人工填写的 CSV 表格。
+
+- 生成脚本：`scripts/build_manual_review_package.py`
+- 使用说明：`docs/results/manual_review_package_guide.md`
+- 外部输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\manual_review_package`
+
+人工复核包覆盖 `needs_review`、`worsened`、`condition`、`medium`、`unknown` 等样本，并生成全量 40 题复核总览表。当前默认方案仍为 `real_hybrid_weighted + fixed_length + top_k=5 + RAG v2`，v3 继续作为定向优化实验记录。
+
+本阶段仍未调用大模型 API，未做 Reranker，未做 Web 前端，也未覆盖历史实验结果。下一步可由人工填写复核表，或继续设计 Reranker / LLM Judge 扩展实验。
