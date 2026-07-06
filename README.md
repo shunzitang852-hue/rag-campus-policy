@@ -272,3 +272,23 @@ Run:
 ```
 
 The demo only displays retrieval results from the student handbook chunks. It does not call an LLM, run a Reranker, generate final RAG answers, or overwrite historical experiment outputs.
+
+## RAG QA Demo
+
+Extractive RAG QA Demo is available through `scripts/demo_rag_qa.py`.
+
+- Default method: `real_hybrid_weighted`
+- Fallback methods: `real_dense`, then `bm25` if the real embedding provider is unavailable
+- Default chunk strategy: `fixed_length`
+- Default top_k: `5`
+- Supported methods: `bm25`, `real_dense`, `real_hybrid_weighted`
+- Supported strategies: `fixed_length`, `article_based`, `structure_aware`
+- Answer mode: `extractive`
+
+Run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\demo_rag_qa.py --query "学生申请解除处分需要满足什么条件？" --method real_hybrid_weighted --strategy fixed_length --top-k 5
+```
+
+The RAG demo generates a short template-based answer from retrieved Chunk text and prints citations with source document titles, `chunk_id`, scores, strategy, and retrieval method. It does not call a paid API, run a Reranker, build a Web frontend, or overwrite historical experiment outputs.

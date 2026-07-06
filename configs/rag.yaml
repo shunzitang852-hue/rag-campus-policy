@@ -1,0 +1,22 @@
+version: rag-extractive-v1
+default_retrieval_method: real_hybrid_weighted
+fallback_methods:
+  - real_dense
+  - bm25
+default_strategy: fixed_length
+default_top_k: 5
+max_context_chars: 4000
+answer_mode: extractive
+max_citations: 3
+max_excerpt_chars: 220
+max_answer_chars: 500
+insufficient_score_threshold: 0.0
+supported_methods:
+  - bm25
+  - real_dense
+  - real_hybrid_weighted
+supported_strategies:
+  - fixed_length
+  - article_based
+  - structure_aware
+notes: Template-based RAG answer generation from retrieved chunks only; no LLM API, reranker, or new model download.
