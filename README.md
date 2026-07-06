@@ -384,3 +384,15 @@ Run:
 ```
 
 v3 自动评估显示，condition 和 medium 目标分组有改善，但整体 `average_keyword_overlap_ratio` 和 `needs_review_count` 不如 v2。因此 v3 当前应视为定向优化实验版本，而不是默认替代 v2 的稳定版本。当前仍未调用大模型 API，未做 Reranker，未做 Web 前端。下一步建议进行人工复核，或设计 Reranker / LLM Judge 对比实验。
+
+## RAG 实验论文阶段性汇总
+
+当前已完成 RAG v3 定向优化实验，并新增面向毕业论文实验章节的阶段性汇总文档：
+
+- 汇总文档：`docs/rag/rag_experiment_summary_for_thesis.md`
+- 汇总脚本：`scripts/summarize_rag_experiments_for_thesis.py`
+- 外部汇总输出目录：`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\rag_experiment_summary_for_thesis`
+
+当前默认 RAG 回答策略建议继续使用 `v2`，检索输入建议为 `real_hybrid_weighted + fixed_length + top_k=5`。v3 作为针对 `condition` 类型和 `medium` 难度问题的定向优化实验记录，不替代 v2 默认方案。
+
+本阶段仍未调用大模型 API，仍未做 Reranker，仍未做 Web 前端，也未覆盖 Dense、BM25、Hybrid、Real Dense、Real Hybrid、RAG v1、RAG v2 或 RAG v3 的历史输出。下一步建议进入人工复核和论文实验章节撰写；如继续扩展实验，可在独立输出目录中设计 Reranker、LLM Judge 或真实大模型生成对照实验。
