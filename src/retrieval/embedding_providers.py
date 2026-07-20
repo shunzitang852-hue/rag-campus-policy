@@ -75,7 +75,14 @@ class SentenceTransformersProvider:
     name = "sentence_transformers"
     is_real_semantic_embedding = True
 
-    def __init__(self, model_name: str, cache_dir: Path | None = None, device: str | None = None) -> None:
+    def __init__(
+        self,
+        model_name: str,
+        cache_dir: Path | None = None,
+        device: str | None = None,
+        *,
+        local_files_only: bool = False,
+    ) -> None:
         if importlib.util.find_spec("sentence_transformers") is None:
             raise ProviderUnavailable("sentence-transformers is not installed in the active Python environment")
         from sentence_transformers import SentenceTransformer  # type: ignore
@@ -85,9 +92,11 @@ class SentenceTransformersProvider:
             kwargs["cache_folder"] = str(cache_dir)
         if device:
             kwargs["device"] = device
+        kwargs["local_files_only"] = local_files_only
         self.model_name = model_name
         self.cache_dir = cache_dir
         self.device = device
+        self.local_files_only = local_files_only
         self.model = SentenceTransformer(model_name, **kwargs)
         dimension_method = getattr(
             self.model,
@@ -118,6 +127,7 @@ class SentenceTransformersProvider:
             "model_name": self.model_name,
             "cache_dir": str(self.cache_dir) if self.cache_dir else None,
             "device": self.device,
+            "local_files_only": self.local_files_only,
             "embedding_dimension": self.dimension,
             "is_real_semantic_embedding": self.is_real_semantic_embedding,
         }
@@ -131,10 +141,19 @@ def create_provider(config: dict[str, Any]) -> EmbeddingProvider:
             dimension = DEFAULT_DIMENSION
         return DeterministicHashProvider(dimension=int(dimension))
     if provider_name == "sentence_transformers":
+        local_files_only = config.get("local_files_only", False)
+        if isinstance(local_files_only, str):
+            local_files_only = local_files_only.strip().lower() in {
+                "1",
+                "true",
+                "yes",
+                "on",
+            }
         return SentenceTransformersProvider(
             model_name=str(config.get("model_name", "BAAI/bge-small-zh-v1.5")),
             cache_dir=Path(str(config["model_cache_dir"])) if config.get("model_cache_dir") else None,
             device=str(config["device"]) if config.get("device") else None,
+            local_files_only=bool(local_files_only),
         )
     if provider_name == "local_model_placeholder":
         return LocalModelPlaceholderProvider(Path(str(config.get("local_model_path", ""))))

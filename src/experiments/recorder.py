@@ -80,6 +80,7 @@ class ExperimentRecorder:
         repo_root: Path = PROJECT_ROOT,
         experiment_id: str | None = None,
         generation_script: str = "unknown",
+        manifest_metadata: Mapping[str, Any] | None = None,
     ) -> None:
         self.experiment_root = Path(experiment_root)
         self.runs_root = self.experiment_root / "runs"
@@ -117,6 +118,7 @@ class ExperimentRecorder:
                 if key not in self.inputs
             }
         )
+        self.manifest_metadata = dict(manifest_metadata or {})
         self.started_at: datetime | None = None
         self.completed_at: datetime | None = None
         self._started = False
@@ -135,10 +137,10 @@ class ExperimentRecorder:
         }
         atomic_write_json(self.run_dir / "config.json", config)
         atomic_write_json(self.run_dir / "environment.json", collect_environment())
-        atomic_write_json(
-            self.run_dir / "data_manifest.json",
-            build_data_manifest(self.inputs),
-        )
+        data_manifest = build_data_manifest(self.inputs)
+        if self.manifest_metadata:
+            data_manifest["metadata"] = self.manifest_metadata
+        atomic_write_json(self.run_dir / "data_manifest.json", data_manifest)
         atomic_write_text(
             self.run_dir / "git_commit.txt",
             f"{git_state['git_commit']}\n",

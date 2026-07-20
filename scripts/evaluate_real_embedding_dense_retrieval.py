@@ -14,9 +14,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.build_real_embedding_dense_retrieval import CONFIG_PATH, OUTPUT_ROOT, STRATEGIES, build_all, configure_model_cache_environment
 from src.preprocessing.policy_splitter import DEFAULT_RAW_PATH, EXPECTED_RAW_SHA256, sha256_file
 from src.retrieval.dense_index import load_jsonl, write_jsonl
-from src.retrieval.embedding import cosine_similarity
-from src.retrieval.embedding_providers import ProviderUnavailable, create_provider, validate_same_dimension
+from src.retrieval.embedding_providers import ProviderUnavailable, create_provider
 from src.retrieval.evaluation import annotate_results, evaluate_strategy
+from src.retrieval.real_dense import search_with_provider
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -48,28 +48,6 @@ def write_summary_csv(path: Path, metrics_by_strategy: dict[str, dict]) -> None:
         writer.writeheader()
         for strategy, metrics in metrics_by_strategy.items():
             writer.writerow({field: metrics.get(field, strategy if field == "strategy" else "") for field in fields})
-
-
-def search_with_provider(query: str, embedding_rows: list[dict[str, Any]], provider: Any, top_k: int = 10) -> list[dict[str, Any]]:
-    query_vectors = provider.encode([query])
-    validate_same_dimension(query_vectors)
-    query_vector = query_vectors[0]
-    scored = []
-    for row in embedding_rows:
-        scored.append((cosine_similarity(query_vector, row["embedding"]), row))
-    scored.sort(key=lambda item: item[0], reverse=True)
-    results: list[dict[str, Any]] = []
-    for rank, (score, row) in enumerate(scored[:top_k], start=1):
-        results.append(
-            {
-                "rank": rank,
-                "retrieved_chunk_id": row["chunk_id"],
-                "retrieved_document_title": row["document_title"],
-                "score": score,
-                "chunk_text": row["chunk_text"],
-            }
-        )
-    return results
 
 
 def _load_json(path: Path) -> dict[str, Any]:

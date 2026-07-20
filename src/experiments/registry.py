@@ -21,6 +21,7 @@ REGISTRY_FIELDS = [
     "chunk_strategy",
     "embedding_model",
     "top_k",
+    "candidate_pool_k",
     "qa_version",
     "hybrid_parameters",
     "random_seed",
@@ -134,6 +135,9 @@ def _scan_run(run_dir: Path) -> dict[str, str]:
         git_state,
     )
     per_question = run_dir / "per_question_results.jsonl"
+    parameters = config.get("parameters", {})
+    if not isinstance(parameters, dict):
+        parameters = {}
     return _registry_row(
         experiment_id=str(config.get("experiment_id") or run_dir.name),
         status=str(metrics_document.get("status") or "unknown"),
@@ -142,6 +146,7 @@ def _scan_run(run_dir: Path) -> dict[str, str]:
         chunk_strategy=str(config.get("chunk_strategy") or "unknown"),
         embedding_model=str(config.get("embedding_model") or "unknown"),
         top_k=config.get("top_k"),
+        candidate_pool_k=parameters.get("candidate_pool_k"),
         qa_version=str(config.get("qa_version") or "unknown"),
         hybrid_parameters=config.get("hybrid_parameters", {}),
         random_seed=config.get("random_seed"),
