@@ -50,14 +50,81 @@ def recall_at_k(rows_by_question: dict[str, list[dict[str, Any]]], k: int) -> fl
 
 
 def mrr_at_10(rows_by_question: dict[str, list[dict[str, Any]]]) -> float:
+    return mrr_at_k(rows_by_question, 10)
+
+
+def mrr_at_k(
+    rows_by_question: dict[str, list[dict[str, Any]]],
+    k: int,
+) -> float:
     if not rows_by_question:
         return 0.0
     total = 0.0
     for rows in rows_by_question.values():
-        rank = _first_relevant_rank(rows, 10)
+        rank = _first_relevant_rank(rows, k)
         if rank:
             total += 1.0 / rank
     return total / len(rows_by_question)
+
+
+def evaluate_strategy_at_k(
+    strategy: str,
+    annotated_rows: list[dict[str, Any]],
+    questions: list[dict[str, Any]],
+    top_k: int,
+) -> dict[str, Any]:
+    """Evaluate one retrieval run at its actual cutoff without relabeling MRR."""
+
+    rows_by_question: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in annotated_rows:
+        rows_by_question[row["question_id"]].append(row)
+    for question in questions:
+        rows_by_question.setdefault(question["question_id"], [])
+    for rows in rows_by_question.values():
+        rows.sort(key=lambda item: int(item["rank"]))
+
+    first_ranks = {
+        question_id: _first_relevant_rank(rows, top_k)
+        for question_id, rows in rows_by_question.items()
+    }
+    top1_scores = [rows[0]["score"] for rows in rows_by_question.values() if rows]
+    relevant_ranks = [rank for rank in first_ranks.values() if rank is not None]
+    question_by_id = {question["question_id"]: question for question in questions}
+    metrics: dict[str, Any] = {
+        "strategy": strategy,
+        "question_count": len(questions),
+        "top_k": top_k,
+        "Recall@1": recall_at_k(rows_by_question, 1),
+        f"Recall@{top_k}": recall_at_k(rows_by_question, top_k),
+        "MRR": mrr_at_k(rows_by_question, top_k),
+        f"MRR@{top_k}": mrr_at_k(rows_by_question, top_k),
+        "average_top1_score": (
+            sum(top1_scores) / len(top1_scores) if top1_scores else 0.0
+        ),
+        "average_relevant_rank": (
+            sum(relevant_ranks) / len(relevant_ranks)
+            if relevant_ranks
+            else None
+        ),
+        "no_hit_count": sum(1 for rank in first_ranks.values() if rank is None),
+        "question_type_recall_at_k": {},
+        "difficulty_recall_at_k": {},
+    }
+    if top_k >= 3:
+        metrics["Recall@3"] = recall_at_k(rows_by_question, 3)
+    for group_field, output_key in [
+        ("question_type", "question_type_recall_at_k"),
+        ("difficulty", "difficulty_recall_at_k"),
+    ]:
+        grouped: dict[str, dict[str, list[dict[str, Any]]]] = defaultdict(dict)
+        for question_id, rows in rows_by_question.items():
+            group = question_by_id[question_id].get(group_field, "unknown")
+            grouped[str(group)][question_id] = rows
+        metrics[output_key] = {
+            group: recall_at_k(group_rows, top_k)
+            for group, group_rows in grouped.items()
+        }
+    return metrics
 
 
 def evaluate_strategy(

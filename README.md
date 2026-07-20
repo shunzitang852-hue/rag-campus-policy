@@ -422,3 +422,36 @@ v3 自动评估显示，condition 和 medium 目标分组有改善，但整体 `
 人工复核包覆盖 `needs_review`、`worsened`、`condition`、`medium`、`unknown` 等样本，并生成全量 40 题复核总览表。当前默认方案仍为 `real_hybrid_weighted + fixed_length + top_k=5 + RAG v2`，v3 继续作为定向优化实验记录。
 
 本阶段仍未调用大模型 API，未做 Reranker，未做 Web 前端，也未覆盖历史实验结果。下一步可由人工填写复核表，或继续设计 Reranker / LLM Judge 扩展实验。
+
+## 实验数据资产管理
+
+当前唯一实验主输出目录为：
+
+`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook`
+
+新实验使用 `runs\<experiment_id>` 规范目录，记录配置、指标、逐题结果、Python/依赖环境、Git 状态以及数据/Chunk/QA 的 SHA-256。现有旧格式结果保持不变，并以 `legacy=true` 登记到可重建总账：
+
+`F:\GraduationThesis\experiment_outputs\hdu_ies\student_handbook\experiment_registry.csv`
+
+常用命令：
+
+```powershell
+# 扫描规范运行目录和旧格式结果，重建总账并列出实验
+.\.venv\Scripts\python.exe scripts\list_experiments.py --rebuild
+
+# 筛选实验
+.\.venv\Scripts\python.exe scripts\list_experiments.py --task-type retrieval
+.\.venv\Scripts\python.exe scripts\list_experiments.py --retrieval-method real_dense
+.\.venv\Scripts\python.exe scripts\list_experiments.py --chunk-strategy fixed_length
+
+# 从总账和真实 metrics/legacy 报告导出论文 CSV/Markdown
+.\.venv\Scripts\python.exe scripts\export_thesis_tables.py
+```
+
+文档：
+
+- 资产审计：`docs/experiments/experiment_asset_audit.md`
+- 运行目录与总账规范：`docs/experiments/experiment_data_management.md`
+- 论文数据查询、导出与误差分析：`docs/experiments/thesis_data_retrieval.md`
+
+所有缺失论文数据保持空白并进入缺失报告，禁止估算或伪造。导出使用新的时间戳目录，非空目录会被拒绝，避免覆盖历史结果。
