@@ -38,14 +38,14 @@ All formal project files for this stage are stored under the F drive. No formal 
 
 | Directory or File | Usage |
 | --- | --- |
-| `src` | Future source code. |
-| `tests` | Future test code. |
+| `src` | Preprocessing, chunking, retrieval, RAG, evaluation, and experiment-management source code. |
+| `tests` | Automated unit and integration tests. |
 | `configs` | Configuration files. |
 | `scripts` | Experiment and utility scripts. |
 | `notebooks` | Research notebooks. |
 | `docs` | Project development documents. |
 | `logs` | Local logs, ignored by Git. |
-| `requirements.txt` | Python dependency list placeholder. |
+| `requirements.txt` | Runtime Python dependencies. |
 | `README.md` | Project overview and stage description. |
 | `PROJECT_PATHS.md` | Fixed path documentation. |
 | `environment_check.md` | Environment check record. |

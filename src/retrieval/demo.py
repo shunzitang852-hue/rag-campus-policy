@@ -150,6 +150,14 @@ def retrieve_bm25(query: str, strategy: str, top_k: int = DEFAULT_TOP_K) -> list
 def _load_real_provider() -> Any:
     config = load_simple_yaml(CONFIG_PATH)
     configure_model_cache_environment(config)
+    local_model_path = Path(str(config.get("local_model_path", "")))
+    if not local_model_path.is_dir():
+        raise ProviderUnavailable(
+            "local embedding model snapshot is unavailable: "
+            f"{local_model_path or '<not configured>'}"
+        )
+    config["model_name"] = str(local_model_path)
+    config["local_files_only"] = True
     return create_provider(config)
 
 

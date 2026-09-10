@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import builtins
+from pathlib import Path
 
 import pytest
 
@@ -39,6 +40,33 @@ def test_real_dense_demo_returns_chinese_query_results_or_skips() -> None:
     assert len(results) == 3
     assert all(result.retrieval_method == "real_dense" for result in results)
     assert_result_fields(results[0])
+
+
+def test_real_provider_uses_validated_local_snapshot_only(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    model_path = tmp_path / "model-snapshot"
+    model_path.mkdir()
+    captured: dict[str, object] = {}
+
+    monkeypatch.setattr(
+        demo,
+        "load_simple_yaml",
+        lambda _: {"model_name": "remote/model", "local_model_path": str(model_path)},
+    )
+    monkeypatch.setattr(demo, "configure_model_cache_environment", lambda _: {})
+
+    def fake_create_provider(config: dict[str, object]) -> object:
+        captured.update(config)
+        return object()
+
+    monkeypatch.setattr(demo, "create_provider", fake_create_provider)
+
+    demo._load_real_provider()
+
+    assert captured["model_name"] == str(model_path)
+    assert captured["local_files_only"] is True
 
 
 def test_top_k_parameter_is_applied() -> None:

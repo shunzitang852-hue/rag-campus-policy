@@ -7,7 +7,8 @@ model_cache_dir: F:\GraduationThesis\models
 hf_home: F:\GraduationThesis\cache\huggingface
 transformers_cache: F:\GraduationThesis\cache\huggingface\transformers
 sentence_transformers_home: F:\GraduationThesis\models\sentence_transformers
-local_model_path: F:\GraduationThesis\models\BAAI\bge-small-zh-v1.5
+local_model_path: F:\GraduationThesis\models\models--BAAI--bge-small-zh-v1.5\snapshots\7999e1d3359715c523056ef9478215996d62a620
+local_files_only: true
 embedding_dimension: auto
 batch_size: 32
 top_k: 10

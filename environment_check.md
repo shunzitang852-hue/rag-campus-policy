@@ -1,5 +1,7 @@
 # Environment Check
 
+> Historical snapshot from 2026-07-02. It records the initial repository setup and is not the current code-completeness status. For current setup, tests, and offline defense commands, use `docs/defense_demo_guide.md`.
+
 ## Basic Information
 
 | Item | Result |

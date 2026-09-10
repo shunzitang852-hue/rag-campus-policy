@@ -259,6 +259,8 @@ This stage only fuses existing Real Embedding Dense and BM25 results. It does no
 
 Retrieval-only QA Demo is available through `scripts/demo_retrieval_qa.py`.
 
+答辩前的环境检查、全量测试、离线演示命令和预期输出见 `docs/defense_demo_guide.md`。
+
 - Default method: `real_dense`
 - Default chunk strategy: `fixed_length`
 - Default top_k: `5`
