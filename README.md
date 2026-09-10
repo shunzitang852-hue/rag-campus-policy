@@ -277,7 +277,10 @@ The demo only displays retrieval results from the student handbook chunks. It do
 
 ## RAG QA Demo
 
-Extractive RAG QA Demo is available through `scripts/demo_rag_qa.py`.
+`scripts/demo_rag_qa.py` supports two explicitly separated generation modes:
+
+- `extractive`: the existing rule-based extractive baseline; this remains the default and does not call an LLM.
+- `llm`: generative RAG using `Context -> versioned Prompt -> real OpenAI-compatible provider -> Answer`. It requires explicit provider configuration and is never simulated.
 
 - Default method: `real_hybrid_weighted`
 - Fallback methods: `real_dense`, then `bm25` if the real embedding provider is unavailable
@@ -285,15 +288,19 @@ Extractive RAG QA Demo is available through `scripts/demo_rag_qa.py`.
 - Default top_k: `5`
 - Supported methods: `bm25`, `real_dense`, `real_hybrid_weighted`
 - Supported strategies: `fixed_length`, `article_based`, `structure_aware`
-- Answer mode: `extractive`
+- Default generator: `extractive`
 
 Run:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts\demo_rag_qa.py --query "学生申请解除处分需要满足什么条件？" --method real_hybrid_weighted --strategy fixed_length --top-k 5
+.\.venv\Scripts\python.exe scripts\demo_rag_qa.py --query "学生申请解除处分需要满足什么条件？" --method real_hybrid_weighted --strategy fixed_length --top-k 5 --generator extractive
 ```
 
-The RAG demo generates a short template-based answer from retrieved Chunk text and prints citations with source document titles, `chunk_id`, scores, strategy, and retrieval method. It does not call a paid API, run a Reranker, build a Web frontend, or overwrite historical experiment outputs.
+The checked-in provider configuration uses DeepSeek `deepseek-v4-flash` through `https://api.deepseek.com/chat/completions`, with non-thinking mode, `temperature=0.0`, and `max_tokens=512`. The API key is read only from `DEEPSEEK_API_KEY` and is never printed. Explicitly use `--generator llm` for a real request; `--debug-prompt` may be used to inspect the prompt and is off by default.
+
+The program builds citations from retrieved metadata rather than trusting model-generated policy names. Neither mode runs a Reranker, builds a Web frontend, or overwrites historical experiment outputs.
+
+The one-request real-LLM validation record is kept separately from formal experiment outputs in `docs/defense/deepseek_llm_smoke_test.md`.
 
 ## RAG Batch Evaluation
 
