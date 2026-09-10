@@ -120,6 +120,8 @@ def _json_mapping(text: str) -> dict[str, Any]:
 
 def _rag_version(row: Mapping[str, str], config: Mapping[str, Any]) -> str:
     parameters = config.get("parameters", {})
+    if isinstance(parameters, dict) and parameters.get("generation_version"):
+        return str(parameters["generation_version"])
     if isinstance(parameters, dict) and parameters.get("rag_version"):
         return str(parameters["rag_version"])
     combined = " ".join(
