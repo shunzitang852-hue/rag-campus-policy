@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "ra-人话": {
+      "source": "Pluviobyte/rnskill",
+      "sourceType": "github",
+      "skillPath": "skills/ra-人话/SKILL.md",
+      "computedHash": "cda711b06539da6b4a88867aaec73b08ea76e492af2631a6152c56e52797183f"
+    }
+  }
+}

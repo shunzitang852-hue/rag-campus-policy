@@ -1,4 +1,5 @@
 __pycache__/
+.pytest_cache/
 .pytest_tmp/
 *.pyc
 *.pyo
@@ -11,8 +12,17 @@ venv/
 .ipynb_checkpoints/
 cache/
 logs/
+models/
+tmp/
 *.tmp
 *.temp
+*.ckpt
+*.onnx
+*.pt
+*.pth
+*.safetensors
+*.gguf
+pytorch_model*.bin
 
 # External large data/model/output directories under F:\GraduationThesis
 ../datasets/
