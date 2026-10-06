@@ -1,0 +1,17 @@
+% Derived from locked experiment data; original outputs are read-only.
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{不同生成模型下RAG回答自动评价结果}
+\label{tab:cm-auto}
+\begin{tabular}{lrrrrr}
+\toprule
+模型 & 关键词重合率 & 证据关键词重合率 & Good & Needs Review & 完成率 \\
+\midrule
+DeepSeek-Flash & 0.667500 & 0.850417 & 28 & 12 & 100.0\% \\
+DeepSeek-V4-Pro & 0.601667 & 0.844583 & 25 & 15 & 100.0\% \\
+Qwen3.8-Max & 0.715833 & 0.956250 & 32 & 8 & 97.5\% \\
+\bottomrule
+\end{tabular}
+\par\smallskip\raggedright 主分析包含全部40题及Q023实际部分答案；完成率按完整回答计。
+\end{table}

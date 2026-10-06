@@ -1,0 +1,18 @@
+% Derived from locked experiment data; original outputs are read-only.
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Qwen3.8-Max与DeepSeek-Flash人工盲评结果}
+\label{tab:cm-manual}
+\begin{tabular}{lrr}
+\toprule
+维度 & Qwen3.8-Max & DeepSeek-Flash \\
+\midrule
+正确性 & $1.975 \pm 0.158$ & $1.850 \pm 0.483$ \\
+忠实性 & $1.975 \pm 0.158$ & $1.725 \pm 0.599$ \\
+完整性 & $1.850 \pm 0.362$ & $1.675 \pm 0.616$ \\
+幻觉发生 & 0/40（0.0\%） & 1/40（2.5\%） \\
+\bottomrule
+\end{tabular}
+\par\smallskip\raggedright 40个配对问题；前三项为均值与样本标准差，分值范围0--2；幻觉为0/1。
+\end{table}

@@ -1,0 +1,16 @@
+% Derived from locked experiment data; original outputs are read-only.
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{排除截断题后的人工评价敏感性分析}
+\label{tab:cm-common}
+\begin{tabular}{lrrrrr}
+\toprule
+模型 & N & 正确性 & 忠实性 & 完整性 & 幻觉发生 \\
+\midrule
+Qwen3.8-Max & 39 & 1.974359 & 1.974359 & 1.846154 & 0/39 \\
+DeepSeek-Flash & 39 & 1.846154 & 1.717949 & 1.666667 & 1/39 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\raggedright 复用原人工评分，仅排除HDU\_IES\_QA\_023；三项W、原始p、Holm p和效应量均与主分析相同。
+\end{table}

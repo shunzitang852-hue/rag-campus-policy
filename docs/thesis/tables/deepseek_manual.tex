@@ -1,0 +1,17 @@
+% Requires booktabs in the parent document. Generated from validated scores.
+\begin{table}[htbp]
+\centering
+\caption{DeepSeek 双模型人工评价（95\% CI）}
+\label{tab:deepseek-manual-evaluation}
+\begin{tabular}{lccc}
+\toprule
+指标 & DeepSeek-Flash & DeepSeek-V4-Pro & CI 方法 \\
+\midrule
+正确性 & $2.000 \pm 0.000$ [2.000, 2.000] & $2.000 \pm 0.000$ [2.000, 2.000] & Bootstrap \\
+忠实性 & $2.000 \pm 0.000$ [2.000, 2.000] & $2.000 \pm 0.000$ [2.000, 2.000] & Bootstrap \\
+完整性 & $2.000 \pm 0.000$ [2.000, 2.000] & $2.000 \pm 0.000$ [2.000, 2.000] & Bootstrap \\
+幻觉发生率 & 0.000 [0.000, 0.088] & 0.000 [0.000, 0.088] & Wilson \\
+\bottomrule
+\end{tabular}
+\par\small $N=40$ pairs; ordinal scores: mean $\pm$ sample std.
+\end{table}

@@ -1,0 +1,17 @@
+% Requires booktabs in the parent document. N/A means test not applicable.
+\begin{table}[htbp]
+\centering
+\caption{DeepSeek 双模型配对统计检验}
+\label{tab:deepseek-manual-significance}
+\begin{tabular}{llccc}
+\toprule
+指标 & 检验 & 原始 $p$ & Holm $p$ & Rank-biserial \\
+\midrule
+正确性 & Wilcoxon & N/A & N/A & N/A \\
+忠实性 & Wilcoxon & N/A & N/A & N/A \\
+完整性 & Wilcoxon & N/A & N/A & N/A \\
+幻觉 & Exact McNemar & 1.0000 & -- & -- \\
+\bottomrule
+\end{tabular}
+\par\small Positive rank-biserial favors Flash; hallucination is reported separately.
+\end{table}

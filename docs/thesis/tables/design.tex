@@ -1,0 +1,18 @@
+% Derived from locked experiment data; original outputs are read-only.
+\begin{table}[htbp]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{跨生成模型稳健性实验设计}
+\label{tab:cm-design}
+\begin{tabularx}{\linewidth}{lX}
+\toprule
+环节 & 控制与分析 \\
+\midrule
+固定输入 & 同一40题、冻结检索证据、上下文和提示模板 \\
+生成配置 & DeepSeek-Flash、DeepSeek-V4-Pro、Qwen3.8-Max；输出预算512 tokens \\
+评价 & 统一规则自动评价；两次独立匿名人工盲评 \\
+统计 & 配对检验、效应量、All40与Common39敏感性分析 \\
+\bottomrule
+\end{tabularx}
+
+\end{table}

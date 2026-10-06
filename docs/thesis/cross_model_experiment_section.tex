@@ -1,0 +1,61 @@
+% Chapter fragment, not a standalone thesis. Requires booktabs and tabularx.
+% Override CrossModelAssetRoot if the host thesis lives outside the repository.
+\providecommand{\CrossModelAssetRoot}{docs/thesis}
+\section{稳健性实验设计与评价指标}
+\label{sec:cm-design}
+本文面向杭州电子科技大学信息工程学院学生手册政策材料开展实验。为降低实验结论对单一生成模型的依赖，本文在固定检索证据和提示模板的条件下，引入DeepSeek系列不同生成配置及Qwen3.8-Max进行稳健性验证。
+检索阶段比较BM25、真实语义Dense及Hybrid，并考察固定长度、条款和结构感知切分；Hash embedding只用于流程基线，不作为真实语义模型。下述验证固定已有检索配置，不再次执行检索或利用评分结果改变证据。
+% Retrieval source: 20260910T035306268526Z_retrieval_real-hybrid-weighted_fixed-length_topk5_2b110eac
+冻结证据来自已登记的加权Hybrid检索实验，采用\texttt{real\_hybrid\_weighted}与\texttt{fixed\_length}，Top-k=5，Dense模型为\texttt{BAAI/bge-small-zh-v1.5}。Dense与BM25权重分别为0.5和0.5，候选池为50，按查询进行min--max归一化。该已登记配置在当前问题集的Recall@5=1.000、MRR@5=1.000，故选作本轮RAG检索输入；该结果不意味着对其他政策材料同样达到满召回。
+
+三种生成配置均使用相同40题、按顺序冻结的证据片段、Context及system/user Prompt；逐题核验Context与Prompt的SHA-256。正式参数统一为temperature=0、max\_tokens=512，Prompt版本为\texttt{policy\_grounded\_qa\_v1}。配置名与API实际返回的模型标识分开记录，缺失或不匹配时停止。
+\input{\CrossModelAssetRoot/tables/design.tex}
+
+关键词重合率以参考答案关键词被生成答案覆盖的比例计算，证据关键词重合率以证据关键词被答案覆盖的比例计算；它们衡量词面覆盖，不能直接判断语义正确性。Good、Needs Review由既有规则及阈值决定，本轮未调整评价规则。人工正确性、忠实性和完整性采用0、1、2三级评分，幻觉采用0/1标记。
+描述统计报告均值、样本标准差和95\%置信区间，均值区间采用10000次百分位bootstrap（seed=42），幻觉率采用Wilson区间。ordinal指标执行双侧Wilcoxon配对检验，对三个预定维度做Holm校正，并报告匹配配对秩二列相关效应量；幻觉独立使用exact McNemar检验。所有统计使用已保存的人工评分，不自动补分。主分析All40保留真实截断答案，Common39仅排除唯一截断题，复用相同评分。
+
+\section{生成模型稳健性验证}
+\label{sec:cm-results}
+\subsection{DeepSeek同家族模型对照}
+DeepSeek-Flash与DeepSeek-V4-Pro在相同40题、Frozen Evidence、Prompt和生成参数下分别生成回答，API返回模型标识不同。两模型在该独立盲评批次的正确性、忠实性和完整性均为$2.000\pm0.000$，幻觉均为0/40。
+\input{\CrossModelAssetRoot/tables/deepseek_manual.tex}
+三个等级指标的40个配对差值全部为0，故Wilcoxon及秩二列相关效应量记为不适用，p值保留为空。该结果反映人工量表的明显天花板效应，不是模型等效性证明。两个生成配置在当前高校政策问答任务上均表现出较高稳定性，但由于人工评分全部达到量表上限，无法进一步通过配对统计区分模型差异。
+
+\subsection{Qwen跨模型家族对照}
+Qwen3.8-Max通过TokenPony第三方OpenAI-compatible API调用，requested\_model与actual\_model均为\texttt{qwen3.8-max}。本实验不是DashScope官方调用，也不声称使用固定权重快照。正式请求设置enable\_thinking=false；从返回行为未观察到reasoning内容，记录thinking\_effective=false，缺失的reasoning\_tokens仍保留为空，该观察不构成后端内部计算过程的独立审计。
+Qwen共尝试40题，完成39题、截断1题、API错误0次，完成率为97.5\%、截断率为2.5\%。HDU\_IES\_QA\_023达到512-token上限，实际部分答案保留于主分析；为维持统一输出预算，没有重试、补全或提高token上限。
+\input{\CrossModelAssetRoot/tables/automatic_all40.tex}
+在关键词重合率、证据关键词重合率及Good数量上，Qwen均高于Flash，Flash高于V4-Pro。排除Q023后共同完整回答集仍保持该排序，说明本次截断没有改变整体自动评价排序（见表\ref{tab:cm-auto-common}）。这只是既有规则下的结果，不代表所有语义评价维度均更优。
+\input{\CrossModelAssetRoot/tables/automatic_common39.tex}
+
+Qwen与Flash人工评分来自本轮独立盲评。旧Flash与V4-Pro盲评和本轮Qwen与Flash盲评不是一次统一三模型盲评；Flash在两个批次的评分不同，描述统计与推断均按批次分开，不能将三个模型组织为统一人工显著性排名。
+\input{\CrossModelAssetRoot/tables/manual_all40.tex}
+正确性均值的95\%置信区间：Qwen为[1.925, 2.000]，Flash为[1.700, 1.975]。
+忠实性均值的95\%置信区间：Qwen为[1.925, 2.000]，Flash为[1.525, 1.900]。
+完整性均值的95\%置信区间：Qwen为[1.725, 1.950]，Flash为[1.475, 1.850]。
+Qwen幻觉率Wilson 95\%区间为[0.000\%, 8.762\%]；Flash幻觉率Wilson 95\%区间为[0.443\%, 12.881\%]。
+\input{\CrossModelAssetRoot/tables/significance_all40.tex}
+Qwen三个等级维度的人工均值均较高，但Holm校正后均未达到0.05显著性水平。忠实性的raw p=0.019694，Holm p=0.059083，秩二列相关系数为+0.844444，非零差值配对仅9题。忠实性指标呈现较大的配对效应方向，但统计证据尚不足以在Holm校正后的0.05水平下拒绝零假设，尚不能确认其显著优于Flash。
+当前样本中Qwen未记录明显幻觉，Flash有1题。exact McNemar的Qwen-only=0、Flash-only=1、Both=0、Neither=39，p=1.000000，未显示显著差异，不能声称Qwen显著降低幻觉。
+
+\input{\CrossModelAssetRoot/tables/manual_common39.tex}
+排除Q023后，三个等级维度的W、原始p、Holm p和效应量均保持不变，主要方向和显著性结论不变。该题两模型的原人工评分均为2/2/2、幻觉为0，排除后减少一个零差值配对；评分保持原样，不因截断状态重新赋分。
+
+\subsection{自动评价与人工评价一致性分析}
+在本轮Qwen与Flash合并的80个答案中，探索性Spearman分析显示词面覆盖与人工评分存在一定关联。
+关键词重合率与正确性的相关系数为$\rho=0.310$（$p=0.00516$）、忠实性的相关系数为$\rho=0.381$（$p=4.83\times10^{-4}$）、完整性的相关系数为$\rho=0.401$（$p=2.29\times10^{-4}$）。
+证据关键词重合率与正确性的相关系数为$\rho=0.450$（$p=2.86\times10^{-5}$）、忠实性的相关系数为$\rho=0.518$（$p=8.76\times10^{-7}$）、完整性的相关系数为$\rho=0.460$（$p=1.80\times10^{-5}$）。
+
+合并样本中，证据关键词重合率与三个人工维度表现出比普通关键词重合率更强的关联；这提示证据覆盖可能更贴近政策回答质量，但不能据此证明指标更有效。并非所有单模型内部相关关系均达到未校正的0.05水平，尤其Qwen正确性和忠实性评分接近上限，区分度有限。
+这些分析未做多重比较校正，Combined也未针对同一题的配对聚类结构进一步调整，所得p值仅作探索性描述。自动与人工评价方向总体一致，不能将相关性或规则标签当作人工语义评价的替代。
+
+\section{实验讨论}
+\label{sec:cm-discussion}
+\subsection{跨模型鲁棒性}
+本文从单一生成配置扩展到三个API模型配置、两个模型家族，包含DeepSeek-Flash与DeepSeek-V4-Pro同家族对照，以及Qwen3.8-Max与DeepSeek-Flash跨家族对照，较好回应了增加多模型验证的建议。三种生成配置均在固定证据下产生政策回答，其中Qwen有一次截断，不能表述为全部完整生成。当前结果支持检索证据与提示组织在这些生成配置下具有一定稳定性，但并未重新比较各模型下的全部检索策略组合，不能据此断言最优检索排序在任意模型或数据集上均保持不变。
+\subsection{自动评价局限性}
+规则评价易受关键词表达、答案长度及改写方式影响。更高的词面覆盖可以与更高人工均值同时出现，但本轮校正后的配对推断尚不足以确认显著模型优势。零差值检验不适用、未显著与模型等效是不同情形，应分别报告；观察到零幻觉也不表示总体幻觉风险为零。
+\subsection{实验局限与有效性威胁}
+问题集仅40题，来源集中于当前高校政策材料，结论的外部适用性有限。DeepSeek批次出现人工评分天花板效应，本轮Qwen评分也接近上限；单评审流程尚未报告评审者间一致性。两次独立盲评的评分尺度与批次差异不能排除，不能拼接为统一三模型推断。
+Qwen经第三方网关调用，无法核验固定底层权重、路由及版本稳定性。不同provider的token统计口径可能不同，统一max\_tokens并不保证相同字符长度或内部计算预算。Qwen有一次512-token截断，主分析与敏感性分析都如实保留这一生成限制。
+自动指标无法完全代替语义评价，相关分析未校正多重比较或合并样本的题内聚类。有效非零配对较少、量表离散且含并列秩，当前渐近Wilcoxon与效应量应结合样本和评分分布解释。结果仅支持当前冻结证据下的稳健性观察，不构成模型优劣的普遍证明。

@@ -1,0 +1,42 @@
+{
+  "title": "基于RAG技术的高校政策知识问答系统构建与检索策略优化研究",
+  "experiment_ids": [
+    "20261005T124451501115Z_deepseek_cross_model",
+    "20261006T070200000000Z_qwen38max_tokenpony_cross_family"
+  ],
+  "source_hashes": {
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\cross_family_three_model_auto_summary.csv": "1a6c732217215e1b2a4c4f27380daeb834be7f8bf7cee918df6d9c1bcd6f6f41",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\qwen_deepseek_manual_statistics.json": "8bb58dc5815a33f301aec81ce504c5c3d121f8ab128d9e8b858ab284a76c0fa4",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\qwen_deepseek_statistics_manifest.json": "1fc06b49acaf133045ea83871013d5af26ab90ee195fdf60365c0789b1985a56",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\cross_family_robustness_final_report.md": "61d2ab5f403b329a8ade7cdf4304d0f485d10e3870d6ac868a8476dfa24d616e",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\frozen_evidence_manifest.json": "f6cc6d8e7347065969ce08a3323b5ba53147cbbf1627386ce56a11f1a9a4ff5c",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\config.json": "3c53189e7dc91ec95a5aaf93bcae76a7f56117107c944430010035a01f946af9",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\deepseek\\20261005T124451501115Z_deepseek_cross_model\\deepseek_manual_statistics.json": "851d56885a453e8c1859935200da76747ba872a19de15e47555a362c33f1b224",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\deepseek\\20261005T124451501115Z_deepseek_cross_model\\deepseek_manual_evaluation_report.md": "34434462e3181055e96604f848f849a910e3e7409cffa8ded981695aad8c1c0a",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\runs\\20260910T035306268526Z_retrieval_real-hybrid-weighted_fixed-length_topk5_2b110eac\\metrics.json": "106607ffdad4f9e0cf50792d456b57ec119aa0ea7baf20d1116c6ca653971ec6",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\cross_family_three_model_summary_table.tex": "64fbf76a3093609a33fae86f5a23e78d0a6a8a78b633552d3e94960b324507c2",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\qwen_deepseek_manual_evaluation_table.tex": "29ae5cc84d4c4a3123a1ba5b36209ba594ff03dac923403f4e67033586cf4987",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\qwen\\20261006T070200000000Z_qwen38max_tokenpony_cross_family\\qwen_deepseek_significance_table.tex": "e10b9fc03751b1acbfc29f298a902a663f30f8428e88b3b60bb3b5ae70984871",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\deepseek\\20261005T124451501115Z_deepseek_cross_model\\deepseek_manual_evaluation_table.tex": "1f4e73cbdc6ab782b2359bdb5e7facf2194f8dbf439cf66371349100481a80d5",
+    "F:\\GraduationThesis\\experiment_outputs\\hdu_ies\\student_handbook\\cross_llm_robustness\\deepseek\\20261005T124451501115Z_deepseek_cross_model\\deepseek_significance_table.tex": "bf7ffc6b25880229530519826fd6d4ad25822dfc3ae259dfa75e7e3079777a27"
+  },
+  "output_hashes": {
+    "tables/automatic_all40.tex": "42565dbd00b611852d4e06adc9dac197405ccb0a6f4a89602fab177ed8b5bb11",
+    "tables/manual_all40.tex": "ab207ee0290cea42dba31f62f6fae1be5e62a82a1c7ad033aaf37e3523696366",
+    "tables/significance_all40.tex": "f78ec1378e2651531c2524bce1fef615bc04cf23333d951f995dbed6b91c9726",
+    "tables/manual_common39.tex": "a429ec30475092fd624a69ea98ce7086ce3ad157682951626f45f01ef55c554e",
+    "tables/automatic_common39.tex": "0fff6a175bf2924b4cc2b04d9446c65c4b7d13e4f1f1228fbdf9b5d16351cdd8",
+    "tables/design.tex": "7408ff3ad7a340eb753e4f62db98ed639506ba7a2095b65a2f07e28b6ca97d04",
+    "cross_model_experiment_section.tex": "d5f5d280309c1bbd4a884a98d01c1382499293adfb7b21dc49b68b6626a61d2a",
+    "cross_model_conclusion.tex": "efdcb404d8c01c6214ba3745a06e9f8f0babe5f87f8810faeac55538551bbe09",
+    "tables/deepseek_manual.tex": "1f4e73cbdc6ab782b2359bdb5e7facf2194f8dbf439cf66371349100481a80d5",
+    "tables/deepseek_significance.tex": "bf7ffc6b25880229530519826fd6d4ad25822dfc3ae259dfa75e7e3079777a27"
+  },
+  "llm_api_calls": 0,
+  "formal_thesis_main": null,
+  "compilation": "chapter fragments only; no formal thesis main located",
+  "original_results_modified": false,
+  "statistics_rerun": false,
+  "independent_blind_batches": true,
+  "export_script_sha256": "4b8e2f391ad44177e922a5688ddfd3738172280e60d1f17cc265503b44834792"
+}
