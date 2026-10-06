@@ -76,7 +76,8 @@ def read_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     return fields, rows
 
 
-def validate_structure(fields: list[str], rows: list[dict[str, str]], experiment_id: str) -> str:
+def validate_structure(fields: list[str], rows: list[dict[str, str]], experiment_id: str, *,
+                       allow_empty_answers: bool = False) -> str:
     required = {"question_id", "anonymous_model", "question", "answer", "review_note", *SCORES}
     missing = required - set(fields)
     if missing:
@@ -95,7 +96,8 @@ def validate_structure(fields: list[str], rows: list[dict[str, str]], experiment
         keys.add((qid, label))
         if "experiment_id" in fields and row["experiment_id"] != experiment_id:
             raise ReviewError("experiment_id does not match the selected experiment")
-        if any(not row[k].strip() for k in ("question", "answer", evidence_field)):
+        nonempty_fields = ("question", evidence_field) if allow_empty_answers else ("question", "answer", evidence_field)
+        if any(not row[k].strip() for k in nonempty_fields):
             raise ReviewError(f"empty question/answer/evidence: {qid}")
         if "evidence" in fields and "context" in fields and row["evidence"] != row["context"]:
             raise ReviewError(f"evidence and context disagree: {qid}")
@@ -146,7 +148,7 @@ def validate_scores(rows: list[dict[str, str]]) -> dict[str, Any]:
             "issues": issues, "blind_key_read": False}
 
 
-def read_blind_mapping(path: Path) -> dict[str, str]:
+def read_blind_mapping(path: Path, *, models: tuple[str, str] = MODELS) -> dict[str, str]:
     # Called only after every required score in all 80 rows validates.
     def reject_duplicate_keys(pairs):
         result = {}
@@ -162,7 +164,7 @@ def read_blind_mapping(path: Path) -> dict[str, str]:
     mapping = data.get("mapping") if isinstance(data, dict) else None
     if (not isinstance(mapping, dict) or set(mapping) != LABELS
             or not all(isinstance(v, str) for v in mapping.values())
-            or set(mapping.values()) != set(MODELS) or len(mapping) != 2):
+            or set(mapping.values()) != set(models) or len(mapping) != 2):
         raise ReviewError("blind key must uniquely map Model A / Model B onto the two requested models")
     return mapping
 
